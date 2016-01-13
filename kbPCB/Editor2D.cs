@@ -38,6 +38,9 @@ namespace kbPCB
 
             // Add a game object which handles the picking:
             GameObjectService.Objects.Add(new FigurePickerObject(GraphicsService, Scene, _cameraObject, DebugRenderer));
+
+            var test = new GridSettingsWindow();
+            UIScreen.Children.Add(test);
         }
 
         private void CreateGate()
@@ -213,6 +216,7 @@ namespace kbPCB
             var graphicsDevice = context.GraphicsService.GraphicsDevice;
             graphicsDevice.Clear(Color.White);
 
+            
             // Find all objects within camera frustum.
             var query = Scene.Query<CameraFrustumQuery>(_cameraObject.CameraNode, context);
 
@@ -220,6 +224,9 @@ namespace kbPCB
             graphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
             graphicsDevice.BlendState = BlendState.AlphaBlend;
             FigureRenderer.Render(query.SceneNodes, context, RenderOrder.BackToFront);
+
+            UIScreen.Draw(context.DeltaTime);
+
 
             // Draw debug information.
             DebugRenderer.Render(context);

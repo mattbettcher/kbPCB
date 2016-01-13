@@ -41,9 +41,13 @@ namespace kbPCB
         // renderers
         protected readonly FigureRenderer FigureRenderer;
         protected readonly DebugRenderer DebugRenderer;
+        protected readonly UIRenderer UIRenderer;
 
         // scene
         protected Scene Scene;
+
+        // ui
+        protected UIScreen UIScreen;
 
         public EditorBase(Microsoft.Xna.Framework.Game game)
             : base(game)
@@ -64,8 +68,19 @@ namespace kbPCB
             // or other samples.
             Services = services.CreateChildContainer();
 
+            // Load a UI theme, which defines the appearance and default values of UI controls.
+            Theme theme = UIContentManager.Load<Theme>("BlendBlue/Theme");
+
             FigureRenderer = new FigureRenderer(GraphicsService, 2000);
             DebugRenderer = new DebugRenderer(GraphicsService, UIContentManager.Load<SpriteFont>("BlendBlue/Default"));
+            UIRenderer = new UIRenderer(GraphicsService.GraphicsDevice, theme);
+
+            UIScreen = new UIScreen("Main Screen", UIRenderer)
+            {
+                Background = Color.TransparentBlack,
+            };
+
+            UIService.Screens.Add(UIScreen);
 
             Scene = new Scene();
         }

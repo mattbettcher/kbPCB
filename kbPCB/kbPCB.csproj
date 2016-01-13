@@ -86,6 +86,7 @@
     <Compile Include="CameraObject.cs" />
     <Compile Include="Editor2D.cs" />
     <Compile Include="FigurePickerObject.cs" />
+    <Compile Include="GridSettingsWindow.cs" />
     <Compile Include="kbPCB.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="EditorBase.cs" />

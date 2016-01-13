@@ -55,6 +55,7 @@ namespace kbPCB
         static kbPCB()
         {
             // Add Non-commercial license
+            // TODO(matt) - I'm using a file for the license key here so that it doesn't get uploaded to github.com 
             using (var licenseFile = File.OpenText(@"..\..\..\license.lic"))
             {
                 DigitalRune.Licensing.AddSerialNumber(licenseFile.ReadToEnd());
