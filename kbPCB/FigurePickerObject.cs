@@ -11,11 +11,13 @@ using DigitalRune.Graphics.SceneGraph;
 using DigitalRune.Mathematics;
 using DigitalRune.Mathematics.Algebra;
 using Microsoft.Xna.Framework;
-
+using DigitalRune.ServiceLocation;
+using Microsoft.Practices.ServiceLocation;
+using DigitalRune.Game.Input;
 
 namespace kbPCB
 {
-
+    // TODO(matt) This whole thing needs reworked! It's more just a testbed.
     // A GeometricObject class which stores a reference to a FigureNode.
     internal class FigureGeometricObject : GeometricObject
     {
@@ -128,7 +130,19 @@ namespace kbPCB
         protected override void OnUpdate(TimeSpan deltaTime)
         {
             // Update direction of picking object.
-            ((GeometricObject)_pickingObject.GeometricObject).Pose = _cameraObject.CameraNode.PoseWorld;
+            // TODO(matt) Clean this bs up!
+            var services = (ServiceContainer)ServiceLocator.Current;
+            var inputService = services.GetInstance<IInputService>();
+            var graphicsService = services.GetInstance<IGraphicsService>();
+            var mousePos = inputService.MousePosition;
+
+            var originalCameraMat = _cameraObject.CameraNode.PoseWorld.Inverse.ToMatrix44F();
+            var originalCameraPos = _cameraObject.CameraNode.PoseWorld.Position;
+            var mouseWorldPosOld = GraphicsHelper.Unproject(graphicsService.GraphicsDevice.Viewport, new Vector3F(mousePos.X, mousePos.Y, 0),
+                _cameraObject.CameraNode.Camera.Projection.ToMatrix44F(), originalCameraMat);
+           
+            ((GeometricObject)_pickingObject.GeometricObject).Pose = new Pose(new Vector3F(mouseWorldPosOld.X, mouseWorldPosOld.Y, ((GeometricObject)_pickingObject.GeometricObject).Pose.Position.Z));
+           
 
             // TODO: If figureNodes can move or scale, we have to copy the new Pose 
             // and Scale from the FigureNodes to their CollisionObjects.
